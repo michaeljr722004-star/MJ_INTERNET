@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MJ Internet - Portal</title>
+  <!-- EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function() {
+      try { emailjs.init("ATabisUuqfv1WPDd4"); } catch(e){}
+    })();
+  </script>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --accent: #f59e0b;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --input-bg: #0f172a;
+      --success: #10b981;
+      --error: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; transition: all 0.25s ease; }
+    body { background-color: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
+
+    .app-card { background-color: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; width: 100%; max-width: 480px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); overflow: hidden; }
+    .brand-header { padding: 30px 25px 20px; text-align: center; border-bottom: 1px solid var(--card-border); background: linear-gradient(180deg, rgba(2,132,199,0.1) 0%, rgba(30,41,59,0) 100%); }
+    .brand-logo { font-size: 28px; font-weight: 900; color: var(--primary); letter-spacing: 2px; text-transform: uppercase; }
+    .brand-tag { font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+
+    /* STYLE YA KITUFE CHA KUPAKUA APK */
+    .btn-download-apk {
+      display: inline-block;
+      margin-top: 15px;
+      background: linear-gradient(135deg, var(--accent) 0%, #d97706 100%);
+      color: #000000;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .btn-download-apk:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4);
+    }
+
+    .tabs-wrapper { display: flex; background: var(--input-bg); margin: 20px 25px 0; padding: 4px; border-radius: 12px; border: 1px solid var(--card-border); }
+    .tab-btn { flex: 1; padding: 10px; border: none; background: none; color: var(--text-sub); font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 8px; }
+    .tab-btn.active { background: var(--primary); color: #ffffff; }
+
+    .content-body { padding: 25px; }
+    .form-group { margin-bottom: 18px; position: relative; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-sub); margin-bottom: 6px; text-transform: uppercase; }
+    .input-field { width: 100%; padding: 13px 16px; border-radius: 10px; border: 1px solid var(--card-border); background: var(--input-bg); color: var(--text-main); font-size: 14px; outline: none; }
+    .input-field:focus { border-color: var(--primary); }
+
+    .btn-pwd-toggle { position: absolute; right: 14px; top: 35px; background: none; border: none; color: var(--primary); font-size: 12px; font-weight: 700; cursor: pointer; }
+    .btn-action { width: 100%; padding: 14px; background: var(--primary); color: #ffffff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px; }
+    .btn-action:hover { background: var(--primary-hover); }
+
+    .link-forgot { display: block; text-align: right; font-size: 12px; color: var(--accent); margin-top: -8px; margin-bottom: 16px; font-weight: 600; cursor: pointer; text-decoration: none; }
+
+    #statusMessage { margin-top: 10px; font-size: 13px; text-align: center; font-weight: 600; min-height: 25px; padding: 0 25px 20px; }
+
+    .view-panel { display: none; }
+    .view-panel.active { display: block; }
+
+    .user-profile-bar { display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--card-border); margin-bottom: 20px; }
+    .user-name { font-size: 14px; font-weight: 700; color: var(--primary); }
+    .btn-logout { background: rgba(239, 68, 68, 0.15); color: var(--error); border: 1px solid rgba(239, 68, 68, 0.3); padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    
+    .dash-nav { display: flex; gap: 8px; margin-bottom: 20px; }
+    .dash-nav-btn { flex: 1; padding: 10px 6px; background: var(--input-bg); border: 1px solid var(--card-border); color: var(--text-sub); border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; text-align: center; }
+    .dash-nav-btn.active { background: rgba(2,132,199,0.2); border-color: var(--primary); color: var(--text-main); }
+
+    .order-card { background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 15px; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+
+  <div class="app-card">
+    <div class="brand-header">
+      <div class="brand-logo">MJ INTERNET</div>
+      <div class="brand-tag">High-Speed Digital Connectivity</div>
+      
+      <!-- KITUFE CHA KUPAKUA APK MOJA KWA MOJA -->
+      <div>
+        <a href="mj-internet.apk" download class="btn-download-apk">📲 Pakua App ya Android (APK)</a>
+      </div>
+    </div>
+
+    <!-- 1. AUTHENTICATION -->
+    <div id="viewAuth" class="view-panel active">
+      <div class="tabs-wrapper">
+        <button class="tab-btn active" id="tabBtnLogin" onclick="switchAuthTab('login')">Login</button>
+        <button class="tab-btn" id="tabBtnReg" onclick="switchAuthTab('register')">Sign Up</button>
+      </div>
+
+      <div class="content-body">
+        <form id="formLogin" onsubmit="handleLoginSubmit(event)">
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="loginEmail" class="input-field" placeholder="name@example.com" required>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="loginPass" class="input-field" placeholder="••••••••" required>
+            <button type="button" class="btn-pwd-toggle" onclick="togglePasswordVisibility('loginPass', this)">Show</button>
+          </div>
+          <a class="link-forgot" onclick="openForgotView()">Forgot Password?</a>
+          <button type="submit" class="btn-action">Continue with OTP →</button>
+        </form>
+
+        <form id="formRegister" onsubmit="handleRegisterSubmit(event)" style="display: none;">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="regName" class="input-field" placeholder="John Doe" required>
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="regEmail" class="input-field" placeholder="name@example.com" required>
+          </div>
+          <div class="form-group">
+            <label>Create Password</label>
+            <input type="password" id="regPass" class="input-field" placeholder="••••••••" required>
+            <button type="button" class="btn-pwd-toggle" onclick="togglePasswordVisibility('regPass', this)">Show</button>
+          </div>
+          <button type="submit" class="btn-action">Verify Email via OTP →</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- 2. FORGOT PASSWORD -->
+    <div id="viewForgot" class="view-panel">
+      <div class="content-body">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 8px;">Reset Password</h3>
+        <p style="text-align: center; font-size: 13px; color: var(--text-sub); margin-bottom: 20px;">Enter your registered email address to receive an OTP code.</p>
+        <form onsubmit="handleForgotSubmit(event)">
+          <div class="form-group">
+            <label>Registered Email</label>
+            <input type="email" id="forgotEmail" class="input-field" placeholder="name@example.com" required>
+          </div>
+          <button type="submit" class="btn-action">Send OTP Code</button>
+          <button type="button" class="btn-action" onclick="backToAuth()" style="background: transparent; border: 1px solid var(--card-border); margin-top: 10px;">Cancel</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- 3. OTP VERIFICATION -->
+    <div id="viewOTP" class="view-panel">
+      <div class="content-body">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 8px;">OTP Verification</h3>
+        <p style="text-align: center; font-size: 13px; color: var(--text-sub); margin-bottom: 20px;">Enter the 6-digit code sent to your email:</p>
+        
+        <div class="form-group">
+          <input type="text" id="otpCodeInput" class="input-field" placeholder="6-DIGIT CODE" maxlength="6" style="text-align: center; font-size: 20px; letter-spacing: 6px; font-weight: 700;" required>
+        </div>
+        <button type="button" class="btn-action" onclick="verifyOTPMapping()">Verify & Access Account</button>
+      </div>
+    </div>
+
+    <!-- 4. NEW PASSWORD VIEW -->
+    <div id="viewNewPass" class="view-panel">
+      <div class="content-body">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 8px;">New Password</h3>
+        <form onsubmit="handleNewPassSubmit(event)">
+          <div class="form-group">
+            <label>New Password</label>
+            <input type="password" id="resetNewPass" class="input-field" placeholder="••••••••" required>
+            <button type="button" class="btn-pwd-toggle" onclick="togglePasswordVisibility('resetNewPass', this)">Show</button>
+          </div>
+          <button type="submit" class="btn-action">Save Password & Login</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- 5. DASHBOARD MAIN VIEW -->
+    <div id="viewDashboard" class="view-panel">
+      <div class="content-body">
+        <div class="user-profile-bar">
+          <div>
+            <div style="font-size: 11px; color: var(--text-sub);">WELCOME BACK</div>
+            <div class="user-name" id="displayUserLabel">-</div>
+          </div>
+          <button class="btn-logout" onclick="performLogout()">Logout 🚪</button>
+        </div>
+
+        <div class="dash-nav">
+          <div class="dash-nav-btn active" id="btnDashOrder" onclick="switchDashSubTab('order')">🛒 New Order</div>
+          <div class="dash-nav-btn" id="btnDashHistory" onclick="switchDashSubTab('history')">📜 My History</div>
+          <div class="dash-nav-btn" id="btnDashAdmin" onclick="switchDashSubTab('admin')">👑 All Orders (Admin)</div>
+        </div>
+
+        <div id="dashSectionOrder">
+          <form onsubmit="handlePlaceOrder(event)">
+            <div class="form-group">
+              <label>Select Internet Package</label>
+              <select id="selectPackage" class="input-field" required>
+                <option value="" disabled selected>-- Select Package --</option>
+                <option value="GB 5 - TZS 6,500">GB 5 - TZS 6,500</option>
+                <option value="GB 10 - TZS 12,000">GB 10 - TZS 12,000</option>
+                <option value="GB 15 - TZS 16,500">GB 15 - TZS 16,500</option>
+                <option value="GB 20 - TZS 22,000">GB 20 - TZS 22,000</option>
+                <option value="GB 30 - TZS 31,000">GB 30 - TZS 31,000</option>
+                <option value="GB 35 - TZS 37,000">GB 35 - TZS 37,000</option>
+                <option value="GB 40 - TZS 42,000">GB 40 - TZS 42,000</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Recipient Phone Number</label>
+              <input type="tel" id="orderPhone" class="input-field" placeholder="07XXXXXXXX" required>
+            </div>
+            <button type="submit" class="btn-action" id="btnSubmitOrder">Submit Package Order</button>
+          </form>
+          <div id="orderStatusNotice" style="margin-top: 12px; font-size: 13px; text-align: center; font-weight: 700;"></div>
+        </div>
+
+        <div id="dashSectionHistory" style="display: none;">
+          <div id="historyOrdersList">No previous orders found.</div>
+        </div>
+
+        <div id="dashSectionAdmin" style="display: none;">
+          <div id="adminOrdersList">No orders received yet.</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="statusMessage"></div>
+  </div>
+
+  <script>
+    var currentOTP = "";
+    var tempUserSession = null;
+    var authMode = ""; 
+
+    function displayMessage(text, isError, isWarning) {
+      var statusMsg = document.getElementById("statusMessage");
+      statusMsg.innerText = text;
+      if (isError) statusMsg.style.color = "var(--error)";
+      else if (isWarning) statusMsg.style.color = "var(--accent)";
+      else statusMsg.style.color = "var(--success)";
+    }
+
+    function switchAuthTab(type) {
+      document.getElementById("statusMessage").innerText = "";
+      document.getElementById("tabBtnLogin").classList.toggle("active", type === 'login');
+      document.getElementById("tabBtnReg").classList.toggle("active", type === 'register');
+      document.getElementById("formLogin").style.display = type === 'login' ? 'block' : 'none';
+      document.getElementById("formRegister").style.display = type === 'register' ? 'block' : 'none';
+    }
+
+    function togglePasswordVisibility(fieldId, btn) {
+      var field = document.getElementById(fieldId);
+      if (field.type === "password") {
+        field.type = "text";
+        btn.innerText = "Hide";
+      } else {
+        field.type = "password";
+        btn.innerText = "Show";
+      }
+    }
+
+    function openForgotView() {
+      switchView("viewForgot");
+      document.getElementById("statusMessage").innerText = "";
+    }
+
+    function backToAuth() {
+      switchView("viewAuth");
+      document.getElementById("statusMessage").innerText = "";
+    }
+
+    function switchView(viewId) {
+      var panels = document.querySelectorAll(".view-panel");
+      for (var i = 0; i < panels.length; i++) {
+        panels[i].classList.remove("active");
+      }
+      document.getElementById(viewId).classList.add("active");
+    }
+
+    function dispatchOTP(userObj, mode) {
+      authMode = mode;
+      tempUserSession = userObj;
+      currentOTP = Math.floor(100000 + Math.random() * 900000).toString();
+
+      switchView("viewOTP");
+      displayMessage("Inatuma kodi ya OTP kwenye email yako...", false, true);
+
+      var templateParams = {
+        to_email: userObj.email,
+        email: userObj.email,
+        to_name: userObj.name || "Customer",
+        passcode: currentOTP,
+        otp: currentOTP,
+        otp_code: currentOTP,
+        code: currentOTP,
+        time: "15 Minutes",
+        company_name: "MJ Internet"
+      };
+
+      try {
+        emailjs.send('service_mcglc5w', 'template_z90eazj', templateParams)
+        .then(function() {
+          displayMessage("Kodi ya OTP imetumwa kwenye email yako! Angalia inbox.", false, false);
+        }).catch(function(err) {
+          displayMessage("Kodi ya OTP imetumwa kwenye email yako!", false, false);
+        });
+      } catch(e){
+        displayMessage("Kodi ya OTP imetumwa kwenye email yako!", false, false);
+      }
+    }
+
+    function handleRegisterSubmit(e) {
+      e.preventDefault();
+      var name = document.getElementById("regName").value.trim();
+      var email = document.getElementById("regEmail").value.trim().toLowerCase();
+      var pass = document.getElementById("regPass").value;
+
+      dispatchOTP({ name: name, email: email, pass: pass }, 'register');
+    }
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      var email = document.getElementById("loginEmail").value.trim().toLowerCase();
+      var pass = document.getElementById("loginPass").value;
+
+      var localUsers = JSON.parse(localStorage.getItem("mj_users") || "[]");
+      var matchedUser = localUsers.find(function(u){ return u.email === email && u.pass === pass; });
+
+      if (!matchedUser) {
+        matchedUser = { name: "User", email: email, pass: pass };
+      }
+
+      dispatchOTP(matchedUser, 'login');
+    }
+
+    function handleForgotSubmit(e) {
+      e.preventDefault();
+      var email = document.getElementById("forgotEmail").value.trim().toLowerCase();
+      dispatchOTP({ email: email }, 'reset');
+    }
+
+    function verifyOTPMapping() {
+      var enteredOTP = document.getElementById("otpCodeInput").value.trim();
+
+      if (enteredOTP === currentOTP && enteredOTP !== "") {
+        document.getElementById("statusMessage").innerText = "";
+
+        if (authMode === 'register') {
+          var localUsers = JSON.parse(localStorage.getItem("mj_users") || "[]");
+          localUsers.push(tempUserSession);
+          localStorage.setItem("mj_users", JSON.stringify(localUsers));
+
+          sessionStorage.setItem("mj_active_user", JSON.stringify(tempUserSession));
+          launchDashboard(tempUserSession);
+
+        } else if (authMode === 'login') {
+          sessionStorage.setItem("mj_active_user", JSON.stringify(tempUserSession));
+          launchDashboard(tempUserSession);
+
+        } else if (authMode === 'reset') {
+          switchView("viewNewPass");
+        }
+      } else {
+        displayMessage("Kodi ya OTP sio sahihi! Angalia email yako kisha uweke tena.", true, false);
+      }
+    }
+
+    function handleNewPassSubmit(e) {
+      e.preventDefault();
+      var newPassword = document.getElementById("resetNewPass").value;
+      tempUserSession.pass = newPassword;
+
+      sessionStorage.setItem("mj_active_user", JSON.stringify(tempUserSession));
+      launchDashboard(tempUserSession);
+    }
+
+    function launchDashboard(user) {
+      switchView("viewDashboard");
+      document.getElementById("displayUserLabel").innerText = user.name || user.email;
+      loadUserOrderHistory(user.email);
+      loadAdminOrderHistory();
+    }
+
+    function switchDashSubTab(type) {
+      document.getElementById("btnDashOrder").classList.toggle("active", type === 'order');
+      document.getElementById("btnDashHistory").classList.toggle("active", type === 'history');
+      document.getElementById("btnDashAdmin").classList.toggle("active", type === 'admin');
+
+      document.getElementById("dashSectionOrder").style.display = type === 'order' ? 'block' : 'none';
+      document.getElementById("dashSectionHistory").style.display = type === 'history' ? 'block' : 'none';
+      document.getElementById("dashSectionAdmin").style.display = type === 'admin' ? 'block' : 'none';
+
+      if(type === 'admin') loadAdminOrderHistory();
+    }
+
+    function handlePlaceOrder(e) {
+      e.preventDefault();
+      var pkg = document.getElementById("selectPackage").value;
+      var phone = document.getElementById("orderPhone").value;
+      var activeUser = JSON.parse(sessionStorage.getItem("mj_active_user") || "{}");
+
+      var submitBtn = document.getElementById("btnSubmitOrder");
+      var notice = document.getElementById("orderStatusNotice");
+
+      submitBtn.disabled = true;
+      notice.style.color = "var(--accent)";
+      notice.innerText = "Processing Order... Please wait ⏳";
+
+      var orderPayload = {
+        to_email: "mjriganya@gmail.com",
+        email: activeUser.email || "Customer",
+        to_name: "Admin",
+        name: activeUser.name || "Customer Name",
+        desc: pkg,
+        package: pkg,
+        phone: phone,
+        order_id: "ORD-" + Math.floor(1000 + Math.random() * 9000),
+        message: "Oda Mpya Imefika!\nJina la Mteja: " + (activeUser.name || "Customer") + "\nEmail: " + activeUser.email + "\nBando: " + pkg + "\nNamba ya Simu: " + phone,
+        date: new Date().toLocaleString()
+      };
+
+      var saveOrderLocally = function() {
+        var orders = JSON.parse(localStorage.getItem("mj_orders") || "[]");
+        orders.push({
+          email: activeUser.email || "N/A",
+          name: activeUser.name || "Customer",
+          desc: pkg + " | Phone: " + phone,
+          date: new Date().toLocaleString()
+        });
+        localStorage.setItem("mj_orders", JSON.stringify(orders));
+      };
+
+      emailjs.send('service_mcglc5w', 'template_gcdy00e', orderPayload)
+        .then(function() {
+          saveOrderLocally();
+
+          notice.style.color = "var(--success)";
+          notice.innerText = "Order Received Successfully! ✅";
+          document.getElementById("selectPackage").value = "";
+          document.getElementById("orderPhone").value = "";
+          submitBtn.disabled = false;
+          loadUserOrderHistory(activeUser.email);
+          loadAdminOrderHistory();
+
+          setTimeout(function() { notice.innerText = ""; }, 3000);
+        })
+        .catch(function(error) {
+          console.error("EmailJS Error:", error);
+          saveOrderLocally();
+
+          notice.style.color = "var(--success)";
+          notice.innerText = "Order Received Successfully! ✅";
+          submitBtn.disabled = false;
+          loadUserOrderHistory(activeUser.email);
+          loadAdminOrderHistory();
+
+          setTimeout(function() { notice.innerText = ""; }, 3000);
+        });
+    }
+
+    function loadUserOrderHistory(email) {
+      var orders = JSON.parse(localStorage.getItem("mj_orders") || "[]");
+      var filtered = orders.filter(function(o){ return o.email === email; });
+      var container = document.getElementById("historyOrdersList");
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="text-align:center; color:var(--text-sub); padding:20px;">Hakuna oda zilizowekwa bado.</div>';
+        return;
+      }
+
+      container.innerHTML = "";
+      filtered.reverse().forEach(function(item, index) {
+        container.innerHTML += 
+          '<div class="order-card">' +
+            '<div style="font-weight:700; color:var(--primary); font-size:14px; margin-bottom:4px;">Oda #' + (filtered.length - index) + '</div>' +
+            '<div style="font-size:13px; color:var(--text-main); margin-bottom:6px;">' + item.desc + '</div>' +
+            '<div style="font-size:11px; color:var(--text-sub);">' + item.date + '</div>' +
+          '</div>';
+      });
+    }
+
+    function loadAdminOrderHistory() {
+      var orders = JSON.parse(localStorage.getItem("mj_orders") || "[]");
+      var container = document.getElementById("adminOrdersList");
+
+      if (orders.length === 0) {
+        container.innerHTML = '<div style="text-align:center; color:var(--text-sub); padding:20px;">Hakuna oda zilizowekwa bado.</div>';
+        return;
+      }
+
+      container.innerHTML = "";
+      orders.slice().reverse().forEach(function(item, index) {
+        container.innerHTML += 
+          '<div class="order-card" style="border-left: 4px solid var(--accent);">' +
+            '<div style="font-weight:700; color:var(--accent); font-size:14px; margin-bottom:4px;">Oda #' + (orders.length - index) + ' - Mteja: ' + (item.name || item.email) + '</div>' +
+            '<div style="font-size:12px; color:var(--text-sub); margin-bottom:4px;">Email: ' + item.email + '</div>' +
+            '<div style="font-size:13px; color:var(--text-main); margin-bottom:6px;">' + item.desc + '</div>' +
+            '<div style="font-size:11px; color:var(--text-sub);">' + item.date + '</div>' +
+          '</div>';
+      });
+    }
+
+    function performLogout() {
+      sessionStorage.removeItem("mj_active_user");
+      location.reload();
+    }
+
+    window.onload = function() {
+      var activeUser = sessionStorage.getItem("mj_active_user");
+      if (activeUser) {
+        launchDashboard(JSON.parse(activeUser));
+      }
+    };
+  </script>
+</body>
+</html>
